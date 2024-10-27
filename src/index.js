@@ -16,6 +16,3 @@ connectDB().then(() => {
 })
 
 
-
-
-    
