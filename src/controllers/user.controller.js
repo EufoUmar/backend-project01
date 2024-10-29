@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/apiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
@@ -41,6 +42,15 @@ const userRegister = asyncHandler(async (req, res) => {
       password,
       username: username.toLowerCase()
    })
+
+    const createdUser = await User.findById(user._id).select("-password -refreshToken")
+
+    if (!createdUser) {
+      throw new ApiError(500, "server went wrong")
+    }
+    return res.status(200).json(
+      new ApiResponse(200, createdUser, "user registered successfully")
+    )
 
 })
 
